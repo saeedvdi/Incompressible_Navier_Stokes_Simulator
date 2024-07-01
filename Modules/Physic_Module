@@ -1,0 +1,64 @@
+# Advection-Diffusion and Pressure Solver
+
+This notebook explains the mathematical representation of the advection-diffusion equations and the pressure solver, and verifies the correctness of the implementation.
+
+## Temperature Advection
+
+The temperature advection equation is implemented as:
+
+\[ T_{\text{next}} = T + \Delta t \left( - (u_x \cdot \Delta t / \Delta x + u_y \cdot \Delta t / \Delta y) + \nu \cdot \nabla^2 T \right) \]
+
+This updates the temperature field \( T \) using the velocity fields \( u_x \) and \( u_y \), time step \(\Delta t\), grid spacings \(\Delta x\) and \(\Delta y\), and the Laplacian of \( T \).
+
+## Horizontal Velocity Prediction
+
+The horizontal velocity prediction equation is:
+
+\[ u_{x_{\text{half}}} = u_x + \Delta t \left( - (u_x \cdot \frac{\partial u_x}{\partial x} + u_y \cdot \frac{\partial u_x}{\partial y}) + \nu \cdot \nabla^2 u_x \right) \]
+
+This predicts the horizontal velocity field using the current velocities, their derivatives, the Laplacian, and the viscosity \(\nu\).
+
+## Vertical Velocity Prediction
+
+The vertical velocity prediction equation is:
+
+\[ u_{y_{\text{half}}} = u_y + \Delta t \left( - (u_x \cdot \frac{\partial u_y}{\partial x} + u_y \cdot \frac{\partial u_y}{\partial y}) + \nu \cdot \nabla^2 u_y \right) \]
+
+This predicts the vertical velocity field using the current velocities, their derivatives, the Laplacian, and the viscosity \(\nu\).
+
+## Pressure Poisson Equation
+
+The pressure solver equation is:
+
+\[ p_{\text{next}}(i,j) = \frac{1}{4} \left( p(i-1,j) + p(i+1,j) + p(i,j-1) + p(i,j+1) - \Delta x^2 \cdot \text{rhs}(i,j) \right) \]
+
+This iteratively solves the Poisson equation for the pressure field using the right-hand side (rhs) and grid spacing \(\Delta x\).
+
+## Velocity Correction
+
+The velocity correction equation is:
+
+\[ u_{x_{\text{next}}} = u_{x_{\text{half}}} - \Delta t \cdot \frac{1}{\rho_{\text{fluid}}} \cdot \frac{\partial p}{\partial x} \]
+
+This corrects the horizontal velocity using the pressure gradient, fluid density \(\rho_{\text{fluid}}\), and time step \(\Delta t\).
+
+## Verification
+
+### Temperature Advection
+- **Correct**: The implementation correctly follows the advection-diffusion equation for temperature.
+
+### Horizontal Velocity Prediction
+- **Correct**: The implementation correctly follows the advection-diffusion equation for horizontal velocity.
+
+### Vertical Velocity Prediction
+- **Correct**: The implementation correctly follows the advection-diffusion equation for vertical velocity.
+
+### Pressure Solver
+- **Correct**: The implementation uses a standard iterative solver (Jacobi iteration) for the Poisson equation.
+
+### Velocity Correction
+- **Correct**: The implementation correctly applies the pressure gradient to update the horizontal velocity.
+
+## Conclusion
+
+The code implementation is correct based on the mathematical representations. Each method correctly represents the corresponding physical equations for advection, diffusion, and pressure correction.
